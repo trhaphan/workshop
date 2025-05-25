@@ -1,0 +1,218 @@
+from abc import ABC, abstractmethod
+import random
+
+class General(ABC):
+    """ 
+    An abstract general character class for representing and manipulating characters in the video game.
+
+    Instance Variables:
+        name (str): The name of the character.
+        health (float): The health of the character.
+        cry (str): The cry of the character.
+
+    Class Attributes:
+        health (float): The default health of a character.
+        strength (float): The default strength of a character.
+        move_dict (dict): The default dictionary of moves for a character.
+    """
+
+    # Class Variables.
+    health = 10.0
+    strength = 1.0
+    move_dict = {'regular_attack' : 1.0}
+
+    def __init__(self, name: str, cry: str) -> None: # Constructor.
+        """ 
+        Create a general character.
+
+        Arguments:
+            name (str): The name of the character.
+            cry (str): The cry of the character.
+        """
+
+        self.name = name
+        self.health = self.health
+        self.cry = cry
+
+    # Methods
+    @abstractmethod
+    def hit(self, move: str) -> float:
+        """ 
+        Calculates and returns the hit points of a move.
+
+        Arguments:
+            move (str): The attack move, which is expected to be a key from move_dict.
+
+        Returns:
+            float: The hit points of the move, calculated as the strength of the character times move_dict[move].
+        """
+
+        return self.strength * self.move_dict[move]
+
+    def get_hit(self, damage: float) -> None:
+        """ 
+        Sets the health of the character.
+
+        Arguments:
+            damage (float): The maximum damage that can be incurred by the attack.
+        """
+
+        self.health = max(self.health-damage, 0.0)
+
+    def rand_move(self) -> str:
+        """ 
+        Returns a random move.
+
+        Returns:
+            str: A random move (i.e., a key) from move_dict.
+        """
+
+        return list(self.move_dict.keys())[random.randrange(0, len(self.move_dict))]
+
+class Knight(General):
+    """ 
+    Knight character class for representing and manipulating knights in the video game.
+
+    Instance Variables:
+        name (str): The name of the knight.
+        health (float): The health of the knight.
+        cry (str): The cry of the knight.
+
+    Class Attributes:
+        health (float): The default health of a knight.
+        strength (float): The default strength of a knight.
+        move_dict (dict): The default dictionary of moves for a knight.
+    """
+
+    health = 13.0
+    strength = 4.0
+    move_dict = General.move_dict.copy()
+    move_dict['spear_attack'] = 1.7
+    
+    def __init__(self, name: str, cry: str) -> None: # Constructor (with parameters).
+        """ 
+        Creates a knight character.
+
+        Arguments:
+            name (str): The name of the knight.
+            cry (str): The cry of the knight.
+        """
+
+        General.__init__(self, name, cry)
+
+    def hit(self, move: str) -> float:
+        """ 
+        Calculates and returns the hit points of a move.
+
+        Arguments:
+            move (str): The attack move, which is expected to be a key from move_dict.
+
+        Returns:
+            float: The hit points of the move, calculated as the strength of the knight times move_dict[move].
+        """
+
+        return General.hit(self, move)
+
+class Mage(General):
+    """ 
+    Mage character class for representing and manipulating mages in the video game.
+
+    Instance Variables:
+        name (str): The name of the mage.
+        health (float): The health of the mage.
+        cry (str): The cry of the mage.
+
+    Class Attributes:
+        health (float): The default health of a mage.
+        strength (float): The default strength of a mage.
+        move_dict (dict): The default dictionary of moves for a mage.
+    """
+
+    health = 22.0
+    strength = 3.0
+    move_dict = General.move_dict.copy()
+    move_dict['spell_attack'] = 1.8
+
+    def __init__(self, name: str, cry: str) -> None: # Constructor (with parameters).
+        """ 
+        Creates a mage character.
+
+        Arguments:
+            name (str): The name of the mage.
+            cry (str): The cry of the mage.
+        """
+
+        General.__init__(self, name, cry)
+
+    def hit(self, move: str) -> float:
+        """ 
+        Calculates and returns the hit points of a move.
+
+        Arguments:
+            move (str): The attack move, which is expected to be a key from move_dict.
+
+        Returns:
+            float: The hit points of the move, calculated as the strength of the mage times move_dict[move].
+        """
+
+        return General.hit(self, move)
+
+class SuperMage(Mage):
+
+    """ 
+    Super mage character class for representing and manipulating mages in the video game.
+
+    Instance Variables:
+        name (str): The name of the super mage.
+        health (float): The health of the super mage.
+        cry (str): The cry of the super mage.
+
+    Class Attributes:
+        health (float): The default health of a super mage.
+        strength (float): The default strength of a super mage.
+        move_dict (dict): The default dictionary of moves for a super mage.
+    """
+
+    health = 24.0
+    strength = 4.0
+    move_dict = Mage.move_dict.copy()
+    move_dict['super_spell_attack'] = 2.2
+
+    def __init__(self, name: str, cry: str) -> None: # Constructor (with parameters).
+        """ 
+        Creates a super mage character.
+
+        Arguments:
+            name (str): The name of the super mage.
+            cry (str): The cry of the super mage.
+        """
+
+        Mage.__init__(self, name, cry)
+
+    def hit(self, move: str) -> float:
+        """ 
+        Calculates and returns the hit points of a move.
+
+        Arguments:
+            move (str): The attack move, which is expected to be a key from move_dict.
+
+        Returns:
+            float: The hit points of the move, calculated as the strength of the super mage times move_dict[move].
+        """
+
+        if move == 'super_spell_attack':
+            bonus = 2.0
+            return General.hit(self, move) + bonus
+        else:
+            return Mage.hit(self, move)
+
+if __name__ == "__main__":
+    mage = Mage('HP', '0-0')
+    super_mage = SuperMage('Lord V.', 'My nose?!')
+
+    print("Before the hit: " + str(super_mage.health))
+
+    damage = mage.hit('spell_attack')
+    super_mage.get_hit(damage)
+    
+    print("After the hit: " + str(super_mage.health))
