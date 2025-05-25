@@ -1,0 +1,35 @@
+#Q_1:
+
+def rec_fib(n):
+    if n == 0:
+        return 0
+    if n == 1:
+        return 1
+    else:
+        return rec_fib(n-1) + rec_fib(n-2)
+
+#Q_2:
+
+#Type assertion 
+
+assert isinstance(rec_fib(0), int) #assert type(0) == int, "input type does not..."
+assert isinstance(rec_fib(5), int)
+
+#Value assertion
+
+assert rec_fib(0) == 0
+assert rec_fib(1) == 1
+assert rec_fib(2) == 1
+assert rec_fib(3) == 2
+assert rec_fib(4) == 3
+assert rec_fib(5) == 5
+assert rec_fib(6) == 8
+assert rec_fib(7) == 13
+assert rec_fib(8) == 21
+
+# Check type safety
+
+try:
+    rec_fib(-1)
+except RecursionError:
+    print("rec_fib(-1) caused recursion error, as expected.")
