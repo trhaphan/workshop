@@ -1,0 +1,21 @@
+#my_is_sorted
+def my_is_sorted(lst: list) -> bool:
+    assert type(lst) == list
+    for i in range(len(lst)-1):
+        try:
+            lst[i] > lst[i+1]
+        except:
+            raise AssertionError
+
+    for i in range(len(lst)-1):
+        if lst[i] > lst[i+1]:
+            return False
+    return True
+
+#my_enumerate
+def my_enumerate(lst: list) -> list:
+    assert type(lst) == list
+    enum = []
+    for i in range(len(lst)):
+        enum.append((i, lst[i]))
+    return enum
